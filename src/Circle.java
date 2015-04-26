@@ -19,9 +19,10 @@ public class Circle extends GameObj {
 	public static final int INIT_VEL_X = 2;
 	public static final int INIT_VEL_Y = 3;
 
-	public Circle(int courtWidth, int courtHeight) {
+
+	public Circle(int courtWidth, int courtHeight, int timeStep) {
 		super(INIT_VEL_X, INIT_VEL_Y, INIT_POS_X, INIT_POS_Y, SIZE, SIZE,
-				courtWidth, courtHeight);
+				courtWidth, courtHeight, timeStep);
 	}
 
 	@Override

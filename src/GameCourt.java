@@ -22,8 +22,9 @@ public class GameCourt extends JPanel {
 
 	// the state of the game logic
 	private Square square; // the Black Square, keyboard control
-	private Circle snitch; // the Golden Snitch, bounces
-	private Poison poison; // the Poison Mushroom, doesn't move
+	private Circle ball; // the Golden Snitch, bounces
+	private Slime slime1; // the slime for player 1
+	private Slime slime2; // the slime for player 2
 
 	public boolean playing = false; // whether the game is running
 	private JLabel status; // Current status text (i.e. Running...)
@@ -31,7 +32,8 @@ public class GameCourt extends JPanel {
 	// Game constants
 	public static final int COURT_WIDTH = 300;
 	public static final int COURT_HEIGHT = 300;
-	public static final int SQUARE_VELOCITY = 4;
+	public static final int SQUARE_VELOCITY = 10;
+	public static final int SQUARE_JUMP_VELOCITY = 20;
 	// Update interval for timer, in milliseconds
 	public static final int INTERVAL = 35;
 
@@ -87,9 +89,12 @@ public class GameCourt extends JPanel {
 	 */
 	public void reset() {
 
-		square = new Square(COURT_WIDTH, COURT_HEIGHT);
-		poison = new Poison(COURT_WIDTH, COURT_HEIGHT);
-		snitch = new Circle(COURT_WIDTH, COURT_HEIGHT);
+		square = new Square(COURT_WIDTH, COURT_HEIGHT, INTERVAL);
+		ball = new Circle(COURT_WIDTH, COURT_HEIGHT, INTERVAL);
+		slime1 = new Slime(COURT_WIDTH, COURT_HEIGHT, INTERVAL, 0,
+				COURT_HEIGHT, Color.green);
+		slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, INTERVAL,
+				COURT_WIDTH - 40, COURT_HEIGHT, Color.blue);
 
 		playing = true;
 		status.setText("Running...");
@@ -107,34 +112,31 @@ public class GameCourt extends JPanel {
 			// advance the square and snitch in their
 			// current direction.
 			square.move();
-			snitch.move();
+			ball.move();
 
 			// make the snitch bounce off walls...
-			snitch.bounce(snitch.hitWall());
-			// ...and the mushroom
-			snitch.bounce(snitch.hitObj(poison));
+			ball.bounce(ball.hitWall());
+			// make the ball bounce off of the slimes
+			ball.bounce(ball.hitObj(slime1));
+			ball.bounce(ball.hitObj(slime2));
 
 			// check for the game end conditions
-			if (square.intersects(poison)) {
-				playing = false;
-				status.setText("You lose!");
-
-			} else if (square.intersects(snitch)) {
-				playing = false;
-				status.setText("You win!");
-			}
-
-			// update the display
-			repaint();
+		} else if (square.intersects(ball)) {
+			playing = false;
+			status.setText("You win!");
 		}
+
+		// update the display
+		repaint();
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		square.draw(g);
-		poison.draw(g);
-		snitch.draw(g);
+		ball.draw(g);
+		slime1.draw(g);
+		slime2.draw(g);
 	}
 
 	@Override
