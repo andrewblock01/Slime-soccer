@@ -27,7 +27,7 @@ public class Circle extends GameObj {
 
 	@Override
 	public void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
+		g.setColor(Color.red);
 		g.fillOval(pos_x, pos_y, width, height);
 	}
 

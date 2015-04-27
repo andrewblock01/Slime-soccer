@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class GameCourt extends JPanel {
 
 	// the state of the game logic
-	private Square square; // the Black Square, keyboard control
 	private Circle ball; // the Golden Snitch, bounces
 	private Slime slime1; // the slime for player 1
 	private Slime slime2; // the slime for player 2
@@ -30,12 +29,13 @@ public class GameCourt extends JPanel {
 	private JLabel status; // Current status text (i.e. Running...)
 
 	// Game constants
-	public static final int COURT_WIDTH = 300;
+	public static final int COURT_WIDTH = 600;
 	public static final int COURT_HEIGHT = 300;
-	public static final int SQUARE_VELOCITY = 10;
-	public static final int SQUARE_JUMP_VELOCITY = 20;
+	public static final int SLIME_MOVE_VELOCITY = 10;
+	public static final int SLIME_JUMP_VELOCITY = 15;
 	// Update interval for timer, in milliseconds
 	public static final int INTERVAL = 35;
+	public static final int G = 10;
 
 	public GameCourt(JLabel status) {
 		// creates border around the court area, JComponent method
@@ -63,21 +63,53 @@ public class GameCourt extends JPanel {
 		// as an arrow key is pressed, by changing the square's
 		// velocity accordingly. (The tick method below actually
 		// moves the square.)
+
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_LEFT)
-					square.v_x = -SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-					square.v_x = SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_DOWN)
-					square.v_y = SQUARE_VELOCITY;
-				else if (e.getKeyCode() == KeyEvent.VK_UP)
-					square.v_y = -SQUARE_VELOCITY;
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					if (!slime1.isJumping()) {
+						slime1.v_y = -SLIME_JUMP_VELOCITY;
+						slime1.setJumping(true);
+					}
+					break;
+				case KeyEvent.VK_RIGHT:
+					slime1.v_x = SLIME_MOVE_VELOCITY;
+					break;
+				case KeyEvent.VK_LEFT:
+					slime1.v_x = -SLIME_MOVE_VELOCITY;
+					break;
+				default:
+					break;
+				}
 			}
 
 			public void keyReleased(KeyEvent e) {
-				square.v_x = 0;
-				square.v_y = 0;
+				slime1.v_x = 0;
+			}
+		});
+
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_W:
+					if (!slime2.isJumping()) {
+						slime2.v_y = -SLIME_JUMP_VELOCITY;
+						slime2.setJumping(true);
+					}
+					break;
+				case KeyEvent.VK_D:
+					slime2.v_x = SLIME_MOVE_VELOCITY;
+					break;
+				case KeyEvent.VK_A:
+					slime2.v_x = -SLIME_MOVE_VELOCITY;
+				default:
+					break;
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {
+				slime2.v_x = 0;
 			}
 		});
 
@@ -89,12 +121,11 @@ public class GameCourt extends JPanel {
 	 */
 	public void reset() {
 
-		square = new Square(COURT_WIDTH, COURT_HEIGHT, INTERVAL);
 		ball = new Circle(COURT_WIDTH, COURT_HEIGHT, INTERVAL);
-		slime1 = new Slime(COURT_WIDTH, COURT_HEIGHT, INTERVAL, 0,
-				COURT_HEIGHT, Color.green);
-		slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, INTERVAL,
-				COURT_WIDTH - 40, COURT_HEIGHT, Color.blue);
+		slime1 = new Slime(COURT_WIDTH, COURT_HEIGHT, INTERVAL, COURT_WIDTH
+				- Slime.getWidth(), COURT_HEIGHT, Color.green);
+		slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, INTERVAL, 0,
+				COURT_HEIGHT, Color.blue);
 
 		playing = true;
 		status.setText("Running...");
@@ -109,31 +140,43 @@ public class GameCourt extends JPanel {
 	 */
 	void tick() {
 		if (playing) {
-			// advance the square and snitch in their
+			// advance the ball and slimes in their
 			// current direction.
-			square.move();
 			ball.move();
+			slime1.move();
+			slime2.move();
 
-			// make the snitch bounce off walls...
+			// allow slime to jump again if slime is on the ground
+			if (slime1.pos_y == slime1.max_y)
+				slime1.setJumping(false);
+			if (slime2.pos_y == slime2.max_y)
+				slime2.setJumping(false);
+
+			// enact gravity on each object in play
+			slime1.v_y += 1;
+			slime2.v_y += 1;
+			ball.v_y += 1;
+
+			// make the ball bounce off walls...
 			ball.bounce(ball.hitWall());
 			// make the ball bounce off of the slimes
 			ball.bounce(ball.hitObj(slime1));
 			ball.bounce(ball.hitObj(slime2));
 
 			// check for the game end conditions
-		} else if (square.intersects(ball)) {
-			playing = false;
-			status.setText("You win!");
-		}
+			/*
+			 * if (square.intersects(ball)) { playing = false;
+			 * status.setText("You're a star!!"); }
+			 */
 
-		// update the display
-		repaint();
+			// update the display
+			repaint();
+		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		square.draw(g);
 		ball.draw(g);
 		slime1.draw(g);
 		slime2.draw(g);
