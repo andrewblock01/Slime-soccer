@@ -18,12 +18,25 @@ public class Slime extends GameObj {
 	 * @param init_y : initial lower left corner of the slime
 	 * @param color
 	 */
-	public Slime(int courtWidth, int courtHeight, int timeStep, int init_x,
+	public Slime(int courtWidth, int courtHeight, int init_x,
 			int init_y, Color color) {
-		super(INIT_VEL_X, INIT_VEL_Y, init_x, init_y - HEIGHT, WIDTH, HEIGHT,
-				courtWidth, courtHeight, timeStep);
+		super(INIT_VEL_X, INIT_VEL_Y, init_x, init_y - HEIGHT / 2, WIDTH, HEIGHT,
+				courtWidth, courtHeight);
 		this.max_y = courtHeight - height / 2;
 		this.color = color;
+	}
+	/**
+	 * 
+	 * @param angle : angle from 3 o'clock
+	 * @return the 'radius' of the slime at the given angle
+	 */
+	public static double radius (double angle) {
+		
+		double x_comp = Math.sin(angle) / (WIDTH / 2);
+		double y_comp = Math.cos(angle) / (HEIGHT / 2);
+		double l = Math.sqrt(1 / (x_comp * x_comp + y_comp * y_comp));
+		System.out.println(l);
+		return l;
 	}
 
 	@Override
@@ -31,24 +44,7 @@ public class Slime extends GameObj {
 		g.setColor(color);
 		g.fillArc(pos_x, pos_y, width, height, 0, 180);
 	}
-
-	public void slimeBounce(int angle) {
-
-	}
-
-	public double slimeAngle (GameObj other) {
-		if (this.willIntersect(other)) {
-			double dx = other.pos_x + other.width /2 - (pos_x + width /2);
-			double dy = other.pos_y + other.height/2 - (pos_y + height/2);
-
-			double theta = Math.acos(dx / (Math.sqrt(dx * dx + dy *dy)));
-			double diagTheta = Math.atan2(height / 2, width / 2);
-			return diagTheta;
-		} else {
-			return 5000;
-		}
-	}
-
+	
 	public static int getWidth() {
 		return WIDTH;
 	}

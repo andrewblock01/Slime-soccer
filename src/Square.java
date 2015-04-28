@@ -25,7 +25,7 @@ public class Square extends GameObj {
 	 */
 	public Square(int courtWidth, int courtHeight, int timeStep) {
 		super(INIT_VEL_X, INIT_VEL_Y, INIT_X, INIT_Y, SIZE, SIZE, courtWidth,
-				courtHeight, timeStep);
+				courtHeight);
 	}
 
 	@Override

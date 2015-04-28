@@ -15,14 +15,14 @@ public class Circle extends GameObj {
 
 	public static final int SIZE = 20;
 	public static final int INIT_POS_X = 170;
-	public static final int INIT_POS_Y = 170;
-	public static final int INIT_VEL_X = 2;
-	public static final int INIT_VEL_Y = 3;
+	public static final int INIT_POS_Y = 280;
+	public static final int INIT_VEL_X = 3;
+	public static final int INIT_VEL_Y = 0;
 
 
-	public Circle(int courtWidth, int courtHeight, int timeStep) {
+	public Circle(int courtWidth, int courtHeight) {
 		super(INIT_VEL_X, INIT_VEL_Y, INIT_POS_X, INIT_POS_Y, SIZE, SIZE,
-				courtWidth, courtHeight, timeStep);
+				courtWidth, courtHeight);
 	}
 
 	@Override

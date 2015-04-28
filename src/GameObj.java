@@ -41,20 +41,18 @@ public class GameObj {
 	public int max_y;
 
 	/** TimeStep: amount of time between each frame */
-	public int timeStep;
 
 	/**
 	 * Constructor
 	 */
 	public GameObj(int v_x, int v_y, int pos_x, int pos_y, int width,
-			int height, int court_width, int court_height, int timeStep) {
+			int height, int court_width, int court_height) {
 		this.v_x = v_x;
 		this.v_y = v_y;
 		this.pos_x = pos_x;
 		this.pos_y = pos_y;
 		this.width = width;
 		this.height = height;
-		this.timeStep = timeStep;
 
 		// take the width and height into account when setting the
 		// bounds for the upper left corner of the object.
@@ -218,6 +216,90 @@ public class GameObj {
 	 *            frame, etc.)
 	 */
 	public void draw(Graphics g) {
+	}
+
+	/**
+	 * This function calculates the collision velocities between an object and
+	 * a slime, given the side of the slime that the object hits.
+	 * 
+	 * @param side : a value of -1 means it won't hit the slime
+	 * 				 a value of 0 means it will hit the top left side
+	 * 				 a value of 1 means it will hit the top right side
+	 * 				 a value of 2 means it will hit the bottom
+	 * @param other : the slime that will be hit
+	 */
+	public void slimeBounce(int side, Slime other) {
+		if (side == -1)
+			return;
+		switch (side) {
+		case 0:
+			//			v_x = other.v_x;
+			//			v_y = other.v_y ;
+			v_x = 0;
+			v_y = 0;
+			System.out.println("Case 0");
+			break;
+		case 1:
+			//			v_x = other.v_x;
+			//			v_y = other.v_y;
+			v_x = 0;
+			v_y = 0;
+			System.out.println("Case 1");
+			break;
+		case 2:
+			v_y = -v_y;
+			System.out.println("Case 2");
+			break;
+		}
+	}
+
+	/**
+	 * 
+	 * @param other : the slime that the object might hit
+	 * @return side of the slime that the object hits
+	 */
+	public int slimeAngle (Slime other) {
+		// calculate angle and distance between object and slime
+
+		int dx = getCenter_x() - other.getCenter_x();
+		int dy = getCenter_y() - other.getCenter_y();
+		double diagTheta = Math.atan2(dy, dx);
+		double distance = Math.sqrt(dx * dx + dy * dy);
+
+		System.out.println("ball center x: " + getCenter_x());
+		System.out.println("ball center y: " + getCenter_y());
+		System.out.println("slime center x: " + other.getCenter_x());
+		System.out.println("slime center y: " + other.getCenter_y());
+		System.out.println("theta: " + diagTheta);
+		System.out.println("distance between: " + distance);
+
+		if (distance <= Slime.radius(diagTheta) + Math.max(height, width) / 2) {
+
+			if (Math.PI / 2 <= diagTheta && diagTheta <= Math.PI) {
+				// hits the top left
+				return 0;
+			} else if (0 <= diagTheta && diagTheta < Math.PI / 2) {
+				System.out.println("I'm here!");
+				// hits the top right
+				return 1;
+			} else if (pos_y == other.getCenter_y()) {
+				// hits the bottom
+				return 2;
+			} else 
+				return -1;
+		}else {
+			return -1;
+		}
+	}
+
+	public int getCenter_x() {
+		int center_x = pos_x + width / 2;
+		return center_x;
+	}
+
+	public int getCenter_y() {
+		int center_y = pos_y + height / 2;
+		return center_y;
 	}
 
 }

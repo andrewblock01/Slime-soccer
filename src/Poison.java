@@ -31,7 +31,7 @@ public class Poison extends GameObj {
 
 	public Poison(int courtWidth, int courtHeight, int timeStep) {
 		super(INIT_VEL_X, INIT_VEL_Y, INIT_X, INIT_Y, SIZE, SIZE, courtWidth,
-				courtHeight, timeStep);
+				courtHeight);
 		try {
 			if (img == null) {
 				img = ImageIO.read(new File(img_file));
