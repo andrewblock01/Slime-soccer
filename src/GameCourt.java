@@ -130,6 +130,7 @@ public class GameCourt extends JPanel {
 				COURT_HEIGHT, Color.blue);
 		goal1 = new Goal(COURT_WIDTH, COURT_HEIGHT, COURT_WIDTH - Goal.getWidth(), COURT_HEIGHT);
 		goal2 = new Goal(COURT_WIDTH, COURT_HEIGHT, 0, COURT_HEIGHT);
+		
 		playing = true;
 		status.setText("Running...");
 
@@ -170,6 +171,14 @@ public class GameCourt extends JPanel {
 			ball.slimeBounce(ball.slimeAngle(slime2), slime2);
 			
 			// check for the game end conditions
+			if (ball.intersects(goal1)) {
+				playing = false;
+				status.setText("Player 2 Wins!!!");
+			} else if (ball.intersects(goal2)) {
+				playing = false;
+				status.setText("Player 1 Wins!!!");
+			}
+			
 			/*
 			 * if (square.intersects(ball)) { playing = false;
 			 * status.setText("You're a star!!"); }
@@ -186,6 +195,8 @@ public class GameCourt extends JPanel {
 		ball.draw(g);
 		slime1.draw(g);
 		slime2.draw(g);
+		goal1.draw(g);
+		goal2.draw(g);
 	}
 
 	@Override

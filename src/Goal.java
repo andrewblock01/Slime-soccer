@@ -5,8 +5,8 @@ public class Goal extends GameObj {
 	
 	private static final int INIT_VEL_X = 0;
 	private static final int INIT_VEL_Y = 0;
-	private static final int WIDTH = 50;
-	private static final int HEIGHT = 40;
+	private static final int WIDTH = 5;
+	private static final int HEIGHT = 150;
 
 	/**
 	 * 
