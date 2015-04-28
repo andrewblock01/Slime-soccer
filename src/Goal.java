@@ -17,6 +17,7 @@ public class Goal extends GameObj {
 	 * @param init_y : initial lower left corner of the slime
 	 * @param color
 	 */
+	
 	public Goal(int courtWidth, int courtHeight, int init_x, int init_y) {
 		super(INIT_VEL_X, INIT_VEL_Y, init_x, init_y - HEIGHT / 2, WIDTH, HEIGHT,
 				courtWidth, courtHeight);
@@ -24,7 +25,6 @@ public class Goal extends GameObj {
 	
 	@Override
 	public void draw(Graphics g) {
-		System.out.println("I have arrived");
 		g.setColor(Color.yellow);
 		g.fillRect(pos_x, pos_y, width, height);
 	}
