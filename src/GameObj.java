@@ -255,7 +255,8 @@ public class GameObj {
 	 * @return side of the slime that the object hits
 	 */
 	public int slimeAngle (Slime other) {
-		// calculate angle and distance between object and slime
+		
+		// calculate future angle and distance between object and slime
 		
 		int next_x = getCenter_x() + v_x;
 		int next_y = getCenter_y() + v_y;

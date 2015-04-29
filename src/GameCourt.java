@@ -86,16 +86,49 @@ public class GameCourt extends JPanel {
 				case KeyEvent.VK_LEFT:
 					slime1.v_x = -SLIME_MOVE_VELOCITY;
 					break;
-				default:
+				case KeyEvent.VK_W:
+					if (!slime2.isJumping()) {
+						slime2.v_y = -SLIME_JUMP_VELOCITY;
+						slime2.setJumping(true);
+					}
+					break;
+				case KeyEvent.VK_D:
+					slime2.v_x = SLIME_MOVE_VELOCITY;
+					break;
+				case KeyEvent.VK_A:
+					slime2.v_x = -SLIME_MOVE_VELOCITY;
+				case KeyEvent.VK_SPACE:
+					if (pointScored) {
+						pointScored = false;
+						ball = new Circle(COURT_WIDTH, COURT_HEIGHT);
+						slime1 = new Slime(COURT_WIDTH, COURT_HEIGHT,
+								COURT_WIDTH - Slime.getWidth(), COURT_HEIGHT,
+								Color.green);
+						slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, 0,
+								COURT_HEIGHT, Color.blue);
+					}
+					break;
+				case KeyEvent.VK_P:
+					pauseOn = !pauseOn;
 					break;
 				}
 			}
 
 			public void keyReleased(KeyEvent e) {
-				slime1.v_x = 0;
-			}
-		});
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_LEFT:
+					slime1.v_x = 0;
+					break;
+				case KeyEvent.VK_A:
+				case KeyEvent.VK_D:
+					slime2.v_x = 0;
+				}
 
+			}
+
+		});
+/*
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
@@ -129,10 +162,10 @@ public class GameCourt extends JPanel {
 			}
 
 			public void keyReleased(KeyEvent e) {
-				slime2.v_x = 0;
+				//slime2.v_x = 0;
 			}
 		});
-		
+*/
 		/*
 		BitKeyHolder keys = new BitKeyHolder();
 		addKeyListener(keys);
