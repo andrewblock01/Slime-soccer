@@ -235,16 +235,16 @@ public class GameObj {
 		case 0:
 			v_x = (int) Math.round(.5 * other.v_x - v_x);
 			v_y = (int) Math.round(.5 * other.v_y - v_y);
-			System.out.println("0");
+//			System.out.println("0");
 			break;
 		case 1:
 			v_x = (int) Math.round(.5 * other.v_x - v_x);
 			v_y = (int) Math.round(.5 * other.v_y - v_y);
-			System.out.println("1");
+//			System.out.println("1");
 			break;
 		case 2:
 			v_y = -v_y;
-			System.out.println("2");
+//			System.out.println("2");
 			break;
 		}
 	}
@@ -273,8 +273,8 @@ public class GameObj {
 //		System.out.println("ball center y: " + getCenter_y());
 //		System.out.println("slime center x: " + other.getCenter_x());
 //		System.out.println("slime center y: " + other.getCenter_y());
-		System.out.println("theta: " + diagTheta);
-		System.out.println("distance between: " + distance);
+//		System.out.println("theta: " + diagTheta);
+//		System.out.println("distance between: " + distance);
 		
 
 		if (distance <= Slime.radius(diagTheta) + Math.max(height, width) / 2) {
