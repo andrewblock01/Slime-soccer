@@ -30,13 +30,13 @@ public class Slime extends GameObj {
 	 * @param angle : angle from 3 o'clock
 	 * @return the 'radius' of the slime at the given angle
 	 */
-	public static double radius (double angle) {
+	public static double radius(double angle) {
 		
-		double x_comp = Math.sin(angle) / (WIDTH / 2);
-		double y_comp = Math.cos(angle) / (HEIGHT / 2);
-		double l = Math.sqrt(1 / (x_comp * x_comp + y_comp * y_comp));
-		System.out.println(l);
-		return l;
+		double x_comp = Math.cos(angle) / (WIDTH / 2);
+		double y_comp = Math.sin(angle) / (HEIGHT / 2);
+		double length = Math.sqrt(1 / (x_comp * x_comp + y_comp * y_comp));
+		System.out.println("length: " + length);
+		return length;
 	}
 
 	@Override

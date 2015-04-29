@@ -137,16 +137,16 @@ public class GameObj {
 			return;
 		switch (d) {
 		case UP:
-			v_y = Math.abs(v_y);
+			v_y = Math.abs(v_y) - 1;
 			break;
 		case DOWN:
-			v_y = -Math.abs(v_y);
+			v_y = -Math.abs(v_y) + 2;
 			break;
 		case LEFT:
-			v_x = Math.abs(v_x);
+			v_x = Math.abs(v_x) - 1;
 			break;
 		case RIGHT:
-			v_x = -Math.abs(v_x);
+			v_x = -Math.abs(v_x) + 1;
 			break;
 		}
 	}
@@ -233,17 +233,17 @@ public class GameObj {
 			return;
 		switch (side) {
 		case 0:
-			//			v_x = other.v_x;
-			//			v_y = other.v_y ;
-			v_x = 0;
-			v_y = 0;
+			v_x = (int) Math.round(.5 * other.v_x - v_x);
+			v_y = (int) Math.round(.5 * other.v_y - v_y);
+			//			v_x = 0;
+			//			v_y = 0;
 			System.out.println("Case 0");
 			break;
 		case 1:
-			//			v_x = other.v_x;
-			//			v_y = other.v_y;
-			v_x = 0;
-			v_y = 0;
+			v_x = (int) Math.round(.5 * other.v_x - v_x);
+			v_y = (int) Math.round(.5 * other.v_y - v_y);
+			//			v_x = 0;
+			//			v_y = 0;
 			System.out.println("Case 1");
 			break;
 		case 2:
@@ -260,10 +260,15 @@ public class GameObj {
 	 */
 	public int slimeAngle (Slime other) {
 		// calculate angle and distance between object and slime
+		
+		int next_x = pos_x + v_x;
+		int next_y = pos_y + v_y;
+		int next_obj_x = other.pos_x + other.v_x;
+		int next_obj_y = other.pos_y + other.v_y;
 
 		int dx = getCenter_x() - other.getCenter_x();
 		int dy = getCenter_y() - other.getCenter_y();
-		double diagTheta = Math.atan2(dy, dx);
+		double diagTheta = Math.atan2(dy + width / 2, dx);
 		double distance = Math.sqrt(dx * dx + dy * dy);
 
 		System.out.println("ball center x: " + getCenter_x());

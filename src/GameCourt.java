@@ -26,8 +26,12 @@ public class GameCourt extends JPanel {
 	private Slime slime2; // the slime for player 2
 	private Goal goal1; // the goal that slime1 protects
 	private Goal goal2; // the goal that slime2 protects
+	private int score1 = 0; // the score for player 1
+	private int score2 = 0; // the score for player 2
 
 	public boolean playing = false; // whether the game is running
+	public boolean pointScored = false; // whether a point has been scored
+	public boolean pauseOn = false; // whether pause is on
 	private JLabel status; // Current status text (i.e. Running...)
 
 	// Game constants
@@ -38,6 +42,7 @@ public class GameCourt extends JPanel {
 	// Update interval for timer, in milliseconds
 	public static final int INTERVAL = 35;
 	public static final int G = 10;
+	public static final int MAX_GOALS = 5;
 
 	public GameCourt(JLabel status) {
 		// creates border around the court area, JComponent method
@@ -105,6 +110,14 @@ public class GameCourt extends JPanel {
 					break;
 				case KeyEvent.VK_A:
 					slime2.v_x = -SLIME_MOVE_VELOCITY;
+				case KeyEvent.VK_SPACE:
+					if (pointScored) {
+						pointScored = false;
+						ball = new Circle(COURT_WIDTH, COURT_HEIGHT);
+					}
+					break;
+				case KeyEvent.VK_P:
+					pauseOn = !pauseOn;
 				default:
 					break;
 				}
@@ -130,9 +143,13 @@ public class GameCourt extends JPanel {
 				COURT_HEIGHT, Color.blue);
 		goal1 = new Goal(COURT_WIDTH, COURT_HEIGHT, COURT_WIDTH - Goal.getWidth(), COURT_HEIGHT);
 		goal2 = new Goal(COURT_WIDTH, COURT_HEIGHT, 0, COURT_HEIGHT);
-		
+
 		playing = true;
-		status.setText("Running...");
+		pointScored = false;
+		pauseOn = false;
+		score1 = 0;
+		score2 = 0;
+		status.setText("Player 2: " + score2 + "  Player 1: " +score1);
 
 		// Make sure that this component has the keyboard focus
 		requestFocusInWindow();
@@ -143,7 +160,7 @@ public class GameCourt extends JPanel {
 	 * triggers.
 	 */
 	void tick() {
-		if (playing) {
+		if (playing && !pointScored && !pauseOn) {
 			// advance the ball and slimes in their
 			// current direction.
 			ball.move();
@@ -159,30 +176,41 @@ public class GameCourt extends JPanel {
 			// enact gravity on each object in play
 			slime1.v_y += 1;
 			slime2.v_y += 1;
-			//ball.v_y += 1;
+			ball.v_y += 1;
 
 			// make the ball bounce off walls...
 			ball.bounce(ball.hitWall());
+
 			// make the ball bounce off of the slimes
-//			ball.bounce(ball.hitObj(slime1));
-//			ball.bounce(ball.hitObj(slime2));
-			
+			//			ball.bounce(ball.hitObj(slime1));
+			//			ball.bounce(ball.hitObj(slime2));
+
 			ball.slimeBounce(ball.slimeAngle(slime1), slime1);
 			ball.slimeBounce(ball.slimeAngle(slime2), slime2);
-			
-			// check for the game end conditions
+
+			if (ball.v_x > Circle.MAX_VEL_X)
+				ball.v_x = Circle.MAX_VEL_X;
+			else if (ball.v_y > Circle.MAX_VEL_Y)
+				ball.v_y = Circle.MAX_VEL_Y;
+
+			// check for the scoring conditions
 			if (ball.intersects(goal1)) {
-				playing = false;
-				status.setText("Player 2 Wins!!!");
+				pointScored = true;
+				score2 += 1;
 			} else if (ball.intersects(goal2)) {
-				playing = false;
-				status.setText("Player 1 Wins!!!");
+				pointScored = true;
+				score1 += 1;
 			}
-			
-			/*
-			 * if (square.intersects(ball)) { playing = false;
-			 * status.setText("You're a star!!"); }
-			 */
+
+			// check for the game end conditions and update status text
+			if (score1 >= MAX_GOALS) {
+				status.setText("Player 1 wins!!!");
+				playing = false;
+			} else if (score2 >= MAX_GOALS) {
+				status.setText("Player 2 wins!!!");
+				playing = false;
+			} else
+				status.setText("Player 2: " + score2 + "  Player 1: " +score1);
 
 			// update the display
 			repaint();
