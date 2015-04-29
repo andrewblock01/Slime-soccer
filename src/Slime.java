@@ -4,8 +4,8 @@ public class Slime extends GameObj {
 
 	private static final int INIT_VEL_X = 0;
 	private static final int INIT_VEL_Y = 0;
-	private static final int WIDTH = 50;
-	private static final int HEIGHT = 40;
+	private static final int WIDTH = 60;
+	private static final int HEIGHT = 50;
 	private Color color;
 	private boolean jumping = false;
 
@@ -35,7 +35,6 @@ public class Slime extends GameObj {
 		double x_comp = Math.cos(angle) / (WIDTH / 2);
 		double y_comp = Math.sin(angle) / (HEIGHT / 2);
 		double length = Math.sqrt(1 / (x_comp * x_comp + y_comp * y_comp));
-//		System.out.println("length: " + length);
 		return length;
 	}
 
@@ -43,6 +42,11 @@ public class Slime extends GameObj {
 	public void draw(Graphics g) {
 		g.setColor(color);
 		g.fillArc(pos_x, pos_y, width, height, 0, 180);
+		g.setColor(Color.black);
+		if (v_x > 0)
+			g.fillOval(getCenter_x() + WIDTH / 5, getCenter_y() - HEIGHT / 3, 7, 7);
+		else
+			g.fillOval(getCenter_x() - WIDTH / 5, getCenter_y() - HEIGHT / 3, 7, 7);
 	}
 	
 	public static int getWidth() {

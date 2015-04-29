@@ -7,6 +7,10 @@
 // imports necessary libraries for Java swing
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 import javax.swing.*;
 
 /**
@@ -48,6 +52,26 @@ public class Game implements Runnable {
 			}
 		});
 		control_panel.add(reset);
+
+		final JButton instructions = new JButton("Instructions");
+		instructions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				court.pauseOn = true;
+				JOptionPane.showMessageDialog(frame, "The point of this game is"
+						+ " to get the red ball into the"
+						+ " opponent's net.\nEach character is a 'slime' "
+						+ "(Player 1 is green and Player 2 is blue).\nTo move"
+						+ " your slime and interact with the ball, Player 1 "
+						+ "uses the arrow keys and Player 2 uses A, W, and D "
+						+ "as arrow keys.\nAfter scoring a point, press the "
+						+ "spacebar to continue.\nUse the P button to pause "
+						+ "and unpause.\n\nHave fun!");
+				court.requestFocusInWindow();
+				court.pauseOn = false;
+			}
+		});
+		control_panel.add(instructions);
+		
 
 		// Put the frame on the screen
 		frame.pack();

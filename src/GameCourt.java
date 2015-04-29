@@ -29,6 +29,7 @@ public class GameCourt extends JPanel {
 	private int score1; // the score for player 1
 	private int score2; // the score for player 2
 	private int numTimesteps; // number of timesteps that have passed
+	private ArrayList<Integer> highScores; // list of high scores
 
 	public boolean playing = false; // whether the game is running
 	public boolean pointScored = false; // whether a point has been scored
@@ -154,6 +155,10 @@ public class GameCourt extends JPanel {
 		score1 = 0;
 		score2 = 0;
 		numTimesteps = 0;
+		
+		highScores = new ArrayList<Integer>(5);
+		
+		
 		status.setText("Player 2: " + score2 + "  Player 1: " + score1
 				+ "   Time: " + timeElapsed());
 
@@ -248,4 +253,5 @@ public class GameCourt extends JPanel {
 	private int timeElapsed() {
 		return (int) Math.round(numTimesteps * INTERVAL * .001);
 	}
+
 }
