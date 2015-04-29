@@ -114,6 +114,11 @@ public class GameCourt extends JPanel {
 					if (pointScored) {
 						pointScored = false;
 						ball = new Circle(COURT_WIDTH, COURT_HEIGHT);
+						slime1 = new Slime(COURT_WIDTH, COURT_HEIGHT,
+								COURT_WIDTH - Slime.getWidth(), COURT_HEIGHT,
+								Color.green);
+						slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, 0,
+								COURT_HEIGHT, Color.blue);
 					}
 					break;
 				case KeyEvent.VK_P:
@@ -127,6 +132,22 @@ public class GameCourt extends JPanel {
 				slime2.v_x = 0;
 			}
 		});
+		
+		/*
+		BitKeyHolder keys = new BitKeyHolder();
+		addKeyListener(keys);
+		if (keys.isKeyPressed(KeyEvent.VK_A))
+			slime2.v_x = -SLIME_MOVE_VELOCITY;
+		if (keys.isKeyPressed(KeyEvent.VK_D))
+			slime2.v_x = SLIME_MOVE_VELOCITY;
+		if (keys.isKeyPressed(KeyEvent.VK_W)) {
+			System.out.println("Hi");
+			if (!slime2.isJumping()) {
+				slime2.v_y = -SLIME_JUMP_VELOCITY;
+				slime2.setJumping(true);
+			}
+		}
+		 */
 
 		this.status = status;
 	}
@@ -139,9 +160,10 @@ public class GameCourt extends JPanel {
 		ball = new Circle(COURT_WIDTH, COURT_HEIGHT);
 		slime1 = new Slime(COURT_WIDTH, COURT_HEIGHT, COURT_WIDTH
 				- Slime.getWidth(), COURT_HEIGHT, Color.green);
-		slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, 0,
-				COURT_HEIGHT, Color.blue);
-		goal1 = new Goal(COURT_WIDTH, COURT_HEIGHT, COURT_WIDTH - Goal.getWidth(), COURT_HEIGHT);
+		slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, 0, COURT_HEIGHT,
+				Color.blue);
+		goal1 = new Goal(COURT_WIDTH, COURT_HEIGHT, COURT_WIDTH
+				- Goal.getWidth(), COURT_HEIGHT);
 		goal2 = new Goal(COURT_WIDTH, COURT_HEIGHT, 0, COURT_HEIGHT);
 
 		playing = true;
@@ -149,7 +171,7 @@ public class GameCourt extends JPanel {
 		pauseOn = false;
 		score1 = 0;
 		score2 = 0;
-		status.setText("Player 2: " + score2 + "  Player 1: " +score1);
+		status.setText("Player 2: " + score2 + "  Player 1: " + score1 + "\t\tHi");
 
 		// Make sure that this component has the keyboard focus
 		requestFocusInWindow();
@@ -182,8 +204,8 @@ public class GameCourt extends JPanel {
 			ball.bounce(ball.hitWall());
 
 			// make the ball bounce off of the slimes
-			//			ball.bounce(ball.hitObj(slime1));
-			//			ball.bounce(ball.hitObj(slime2));
+			// ball.bounce(ball.hitObj(slime1));
+			// ball.bounce(ball.hitObj(slime2));
 
 			ball.slimeBounce(ball.slimeAngle(slime1), slime1);
 			ball.slimeBounce(ball.slimeAngle(slime2), slime2);
@@ -210,7 +232,7 @@ public class GameCourt extends JPanel {
 				status.setText("Player 2 wins!!!");
 				playing = false;
 			} else
-				status.setText("Player 2: " + score2 + "  Player 1: " +score1);
+				status.setText("Player 2: " + score2 + "  Player 1: " + score1);
 
 			// update the display
 			repaint();

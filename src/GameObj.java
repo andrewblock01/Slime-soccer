@@ -235,20 +235,16 @@ public class GameObj {
 		case 0:
 			v_x = (int) Math.round(.5 * other.v_x - v_x);
 			v_y = (int) Math.round(.5 * other.v_y - v_y);
-			//			v_x = 0;
-			//			v_y = 0;
-			System.out.println("Case 0");
+//			System.out.println("Case 0");
 			break;
 		case 1:
 			v_x = (int) Math.round(.5 * other.v_x - v_x);
 			v_y = (int) Math.round(.5 * other.v_y - v_y);
-			//			v_x = 0;
-			//			v_y = 0;
-			System.out.println("Case 1");
+//			System.out.println("Case 1");
 			break;
 		case 2:
 			v_y = -v_y;
-			System.out.println("Case 2");
+//			System.out.println("Case 2");
 			break;
 		}
 	}
@@ -261,22 +257,24 @@ public class GameObj {
 	public int slimeAngle (Slime other) {
 		// calculate angle and distance between object and slime
 		
-		int next_x = pos_x + v_x;
-		int next_y = pos_y + v_y;
-		int next_obj_x = other.pos_x + other.v_x;
-		int next_obj_y = other.pos_y + other.v_y;
+		int next_x = getCenter_x() + v_x;
+		int next_y = getCenter_y() + v_y;
+		int next_obj_x = other.getCenter_x() + other.v_x;
+		int next_obj_y = other.getCenter_y() + other.v_y;
 
-		int dx = getCenter_x() - other.getCenter_x();
-		int dy = getCenter_y() - other.getCenter_y();
+		int dx = next_x - next_obj_x;
+		int dy = next_y - next_obj_y;
 		double diagTheta = Math.atan2(dy + width / 2, dx);
 		double distance = Math.sqrt(dx * dx + dy * dy);
 
+		/*
 		System.out.println("ball center x: " + getCenter_x());
 		System.out.println("ball center y: " + getCenter_y());
 		System.out.println("slime center x: " + other.getCenter_x());
 		System.out.println("slime center y: " + other.getCenter_y());
 		System.out.println("theta: " + diagTheta);
 		System.out.println("distance between: " + distance);
+		*/
 
 		if (distance <= Slime.radius(diagTheta) + Math.max(height, width) / 2) {
 
