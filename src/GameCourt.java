@@ -26,8 +26,9 @@ public class GameCourt extends JPanel {
 	private Slime slime2; // the slime for player 2
 	private Goal goal1; // the goal that slime1 protects
 	private Goal goal2; // the goal that slime2 protects
-	private int score1 = 0; // the score for player 1
-	private int score2 = 0; // the score for player 2
+	private int score1; // the score for player 1
+	private int score2; // the score for player 2
+	private int numTimesteps; // number of timesteps that have passed
 
 	public boolean playing = false; // whether the game is running
 	public boolean pointScored = false; // whether a point has been scored
@@ -41,7 +42,7 @@ public class GameCourt extends JPanel {
 	public static final int SLIME_JUMP_VELOCITY = 15;
 	// Update interval for timer, in milliseconds
 	public static final int INTERVAL = 35;
-	public static final int G = 10;
+	// Number of goals necessary to win
 	public static final int MAX_GOALS = 5;
 
 	public GameCourt(JLabel status) {
@@ -97,6 +98,7 @@ public class GameCourt extends JPanel {
 					break;
 				case KeyEvent.VK_A:
 					slime2.v_x = -SLIME_MOVE_VELOCITY;
+					break;
 				case KeyEvent.VK_SPACE:
 					if (pointScored) {
 						pointScored = false;
@@ -128,59 +130,6 @@ public class GameCourt extends JPanel {
 			}
 
 		});
-/*
-		addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				switch (e.getKeyCode()) {
-				case KeyEvent.VK_W:
-					if (!slime2.isJumping()) {
-						slime2.v_y = -SLIME_JUMP_VELOCITY;
-						slime2.setJumping(true);
-					}
-					break;
-				case KeyEvent.VK_D:
-					slime2.v_x = SLIME_MOVE_VELOCITY;
-					break;
-				case KeyEvent.VK_A:
-					slime2.v_x = -SLIME_MOVE_VELOCITY;
-				case KeyEvent.VK_SPACE:
-					if (pointScored) {
-						pointScored = false;
-						ball = new Circle(COURT_WIDTH, COURT_HEIGHT);
-						slime1 = new Slime(COURT_WIDTH, COURT_HEIGHT,
-								COURT_WIDTH - Slime.getWidth(), COURT_HEIGHT,
-								Color.green);
-						slime2 = new Slime(COURT_WIDTH, COURT_HEIGHT, 0,
-								COURT_HEIGHT, Color.blue);
-					}
-					break;
-				case KeyEvent.VK_P:
-					pauseOn = !pauseOn;
-				default:
-					break;
-				}
-			}
-
-			public void keyReleased(KeyEvent e) {
-				//slime2.v_x = 0;
-			}
-		});
-*/
-		/*
-		BitKeyHolder keys = new BitKeyHolder();
-		addKeyListener(keys);
-		if (keys.isKeyPressed(KeyEvent.VK_A))
-			slime2.v_x = -SLIME_MOVE_VELOCITY;
-		if (keys.isKeyPressed(KeyEvent.VK_D))
-			slime2.v_x = SLIME_MOVE_VELOCITY;
-		if (keys.isKeyPressed(KeyEvent.VK_W)) {
-			System.out.println("Hi");
-			if (!slime2.isJumping()) {
-				slime2.v_y = -SLIME_JUMP_VELOCITY;
-				slime2.setJumping(true);
-			}
-		}
-		 */
 
 		this.status = status;
 	}
@@ -204,7 +153,9 @@ public class GameCourt extends JPanel {
 		pauseOn = false;
 		score1 = 0;
 		score2 = 0;
-		status.setText("Player 2: " + score2 + "  Player 1: " + score1 + "\t\tHi");
+		numTimesteps = 0;
+		status.setText("Player 2: " + score2 + "  Player 1: " + score1
+				+ "   Time: " + timeElapsed());
 
 		// Make sure that this component has the keyboard focus
 		requestFocusInWindow();
@@ -216,6 +167,10 @@ public class GameCourt extends JPanel {
 	 */
 	void tick() {
 		if (playing && !pointScored && !pauseOn) {
+
+			// add one more timestep
+			numTimesteps++;
+
 			// advance the ball and slimes in their
 			// current direction.
 			ball.move();
@@ -259,13 +214,16 @@ public class GameCourt extends JPanel {
 
 			// check for the game end conditions and update status text
 			if (score1 >= MAX_GOALS) {
-				status.setText("Player 1 wins!!!");
+				status.setText("Player 1 wins!!!   Won in " + timeElapsed()
+						+ " seconds");
 				playing = false;
 			} else if (score2 >= MAX_GOALS) {
-				status.setText("Player 2 wins!!!");
+				status.setText("Player 2 wins!!!   Won in " + timeElapsed()
+						+ " seconds");
 				playing = false;
 			} else
-				status.setText("Player 2: " + score2 + "  Player 1: " + score1);
+				status.setText("Player 2: " + score2 + "  Player 1: " + score1
+						+ "   Time: " + timeElapsed());
 
 			// update the display
 			repaint();
@@ -285,5 +243,9 @@ public class GameCourt extends JPanel {
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(COURT_WIDTH, COURT_HEIGHT);
+	}
+
+	private int timeElapsed() {
+		return (int) Math.round(numTimesteps * INTERVAL * .001);
 	}
 }

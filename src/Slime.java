@@ -35,7 +35,7 @@ public class Slime extends GameObj {
 		double x_comp = Math.cos(angle) / (WIDTH / 2);
 		double y_comp = Math.sin(angle) / (HEIGHT / 2);
 		double length = Math.sqrt(1 / (x_comp * x_comp + y_comp * y_comp));
-		System.out.println("length: " + length);
+//		System.out.println("length: " + length);
 		return length;
 	}
 
