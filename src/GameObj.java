@@ -140,7 +140,7 @@ public class GameObj {
 			v_y = Math.abs(v_y) - 1;
 			break;
 		case DOWN:
-			v_y = -Math.abs(v_y) + 2;
+			v_y = -Math.abs(v_y) + 3;
 			break;
 		case LEFT:
 			v_x = Math.abs(v_x) - 1;
